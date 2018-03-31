@@ -37,7 +37,14 @@ app.route('/')
     .get(function(req, res) {
 		  res.sendFile(process.cwd() + '/views/index.html');
     })
-
+app.route('/api/whoami')
+  .get(function(req, res) {
+  res.type('json').send({
+    ipaddress: req.ip,
+    language: req.headers['accept-language'].split(',')[0],
+    software: req.headers['user-agent'].substring(req.headers['user-agent'].indexOf('(') + 1, req.headers['user-agent'].indexOf(')'))
+  });
+})
 // Respond not found to all the wrong routes
 app.use(function(req, res, next){
   res.status(404);
@@ -53,7 +60,7 @@ app.use(function(err, req, res, next) {
   }  
 })
 
-app.listen(process.env.PORT, function () {
+app.listen(process.env.PORT || 3000, function () {
   console.log('Node.js listening ...');
 });
 
